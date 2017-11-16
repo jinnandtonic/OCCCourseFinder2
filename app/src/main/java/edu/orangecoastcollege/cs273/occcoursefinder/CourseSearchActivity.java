@@ -2,6 +2,8 @@ package edu.orangecoastcollege.cs273.occcoursefinder;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -52,6 +54,9 @@ public class CourseSearchActivity extends AppCompatActivity {
 
         //TODO (1): Construct instructorSpinnerAdapter using the method getInstructorNames()
         //TODO: to populate the spinner.
+        ArrayAdapter<String> isntructorSpinnerAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getInstructorNames());
+        instructorSpinner.setAdapter(isntructorSpinnerAdapter);
 
 
     }
@@ -59,12 +64,32 @@ public class CourseSearchActivity extends AppCompatActivity {
     //TODO (2): Create a method getInstructorNames that returns a String[] containing the entry
     //TODO: "[SELECT INSTRUCTOR]" at position 0, followed by all the full instructor names in the
     //TODO: allInstructorsList
+    private String[] getInstructorNames() {
+        String[] instructorNames = new String[allInstructorsList.size() + 1];
 
+        instructorNames[0] = "[Select Instructor]";
+
+        for (int i = 1; i <instructorNames.length; ++i) {
+            instructorNames[i] = allInstructorsList.get(i - 1).getFullName();
+        }
+
+        return instructorNames;
+    }
 
     //TODO (3): Create a void method named reset that sets the test of the edit text back to an
     //TODO: empty string, sets the selection of the Spinner to 0 and clears out the offeringListAdapter,
     //TODO: then rebuild it with the allOfferingsList
+    public void reset(View view) {
+        // set spinner back to 0
+        instructorSpinner.setSelection(0);
 
+        courseTitleEditText.setText("");
+
+        // clear list adapter
+        offeringListAdapter.clear();
+        // repopulate from all offerings
+        offeringListAdapter.addAll(allOfferingsList);
+    }
 
 
     //TODO (4): Create a TextWatcher named courseTitleTextWatcher that will implement the onTextChanged method.
